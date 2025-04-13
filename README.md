@@ -1,3 +1,9 @@
+👩‍💻 Developed by: I.Arshiya
+
+🎓 Internship Domain: Data Science
+
+🏢 Company: Oasis Infobyte
+
 # TASK 2🚗 Car Price Prediction  
 
 ## 📌 Project Overview
