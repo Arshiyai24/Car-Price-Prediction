@@ -1,0 +1,382 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.express as px
+import joblib
+import seaborn as sns
+import numpy as np
+# Metrics and tuning
+from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+
+# Models
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
+df=pd.read_csv('/content/car data.csv')
+  df.head()
+  df.dtypes
+  df.info()
+df.isna().any()
+ dup = df.duplicated().sum()
+print(f'number of duplicated rows: {dup}') 
+#Missing Values/Null Values Count
+df.isnull().sum() 
+  #Calculate missing values count
+missing_values = df.isnull()
+#Create a heatmap
+plt.figure(figsize=(10, 6))
+sns.heatmap(missing_values, cmap='viridis', cbar=False)
+plt.title('Missing Values Heatmap')
+plt.show()
+  df.columns
+#Dataset Describe
+df.describe(include='all').round(2)
+ #Check Unique Values for each variable
+for i in df.columns.tolist():
+  print("No. of unique values in ",i,"is",df[i].nunique(),".")
+top5= df['Car_Name'].value_counts()[:5]
+plt.figure(figsize=(8, 5))
+sns.countplot(x='Car_Name',data=df,order=top5.index,palette='crest')
+plt.xlabel('Car Name')
+plt.ylabel('Count')
+plt.title('Top 5 Car Names')
+plt.show()
+  plt.figure(figsize=(10, 6))
+yearly_count = df.groupby('Year').count()['Car_Name']
+yearly_count.plot(kind='bar')
+plt.xticks(rotation=45)
+plt.xlabel('Year')
+plt.ylabel('Count')
+plt.title('Number of Cars Bought Each Year')
+plt.show()
+f,axes = plt.subplots(2,2,figsize=(15,10))
+sns.countplot(x='Transmission',data=df,ax=axes[1,0])
+sns.countplot(x='Fuel_Type',data=df,ax=axes[1,1])
+sns.countplot(x='Owner',data=df,ax=axes[0,1])
+sns.countplot(x='Selling_type',data=df,ax=axes[0,0])  
+df['Price_Diff']=df['Present_Price'] - df['Selling_Price']
+f,axes =plt.subplots(2,2,figsize=(19,8))
+palette1 = sns.color_palette("pastel")
+palette2 = sns.color_palette("dark")
+sns.barplot(x='Transmission',y='Price_Diff',data=df,ax=axes[1,0],palette=palette1)
+sns.barplot(x='Fuel_Type',y='Price_Diff',data=df,ax=axes[1,1],palette=palette2)
+sns.barplot(x='Owner',y='Price_Diff',data=df,ax=axes[0,1],palette=palette1)
+sns.barplot(x='Selling_type',y='Price_Diff',data=df,ax=axes[0,0],palette=palette2)
+plt.tight_layout()
+plt.show()
+df['Year']=2019-df['Year']
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Year',y='Selling_Price',data=df)
+plt.figure(figsize=(10, 6))
+sns.scatterplot(data=df,x='Driven_kms',y='Selling_Price')
+plt.xlabel("Driven Kilometers")
+plt.ylabel("Selling Price")
+plt.title('Scatter Plot of   Selling Price vs Driven Kilometers')
+plt.show()
+cv=5
+r2=[]
+cv_score=[]
+mae=[]
+mse=[]
+X=df.drop('Selling_Price',axis=1)
+y=df['Selling_Price']
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.3,random_state=0)
+X_train.shape,y_train.shape,X_test.shape,y_test.shape
+y_train.value_counts()
+def evaluate_model(model,y_test,y_pred):
+  y_t=np.exp(y_test)
+  y_p=np.exp(y_pred)
+  y_train2=np.exp(model.predict(y_train))
+  y_train_pred=np.exp(model.predict(X_train))
+  mse=mean_squared_error(y_t,y_p)
+  rmse=np.sqrt(mse)
+  mae=mean_absolute_error(y_t,y_p)
+  r2=r2_score(y_train2,y_train_pred)
+  r2=r2_score(y_t,y_p)
+  r2_adjusted=1-(1-r2)*(len(y_test)-1)/(len(y_test)-x_test.shape[1]-1)
+  print('MSE:',mse)
+  print('RMSE:',rmse)
+  print('MAE:',mae)
+  print('Train R2:',r2_train)
+  print('Test R2:',r2)
+  print('Adjusted R2:',r2_adjusted)
+  plt.figure(figsize=(12,4))
+  plt.plot((y_p)[:100])
+  plt.plot((np.array(y_t)[:100]))
+  plt.legend(["Predicted","Actual"])
+  plt.title=('Actual and Predicted Selling Price',fontsize==12)
+def evaluate_model(model,y_test,y_pred):
+  y_t=np.exp(y_test)
+  y_p=np.exp(y_pred)
+  y_train2=np.exp(model.predict(y_train))
+  y_train_pred=np.exp(model.predict(X_train))
+  mse=mean_squared_error(y_t,y_p)
+  rmse=np.sqrt(mse)
+  mae=mean_absolute_error(y_t,y_p)
+  r2=r2_score(y_t,y_p)
+  r2=r2_score(y_t,y_p)
+  r2_adjusted=1-(1-r2)*(len(y_test)-1)/(len(y_test)-x_test.shape[1]-1)
+  print('MSE:',mse)
+  print('RMSE:',rmse)
+  print('MAE:',mae)
+  print('Train R2:',r2_train)
+  print('Test R2:',r2)
+  print('Adjusted R2:',r2_adjusted)
+  plt.figure(figsize=(12,4))
+  plt.plot((y_p)[:100])
+  plt.plot((np.array(y_t)[:100]))
+  plt.legend(["Predicted","Actual"])
+  plt.title('Actual and Predicted Selling Price',fontsize=12)
+  try:
+    importance =model.feature_importances_
+  except:
+    importance = model.coef_
+    importance = np.absolute(importance)
+    if len(importance)==len(features):
+      pass
+    else:
+      importance = importance[0]
+      feat=pd.Series(importance,index=features)
+      plt.figure(figsize=(7,4))
+      plt.title('Feature Importances (top5) for '+str(model),fontsize=12)
+      plt.xlabel('Relative Importance')
+      feat.nlargest(5).plot(kind='barh')
+      model_score =[mse,rmse,mae,r2_train,r2,r2_adjusted]
+      return model_score
+  
+score = pd.DataFrame(columns=['MSE','RMSE','MAE','Train R2','Test R2','Adjusted R2'])
+import pandas as pd
+print(X_train.dtypes)
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+X_train=X_train.drop(columns=['Car_Name'])
+X_test=X_test.drop(columns=['Car_Name'])
+  from sklearn.compose import ColumnTransformer
+categorical_features =['Fuel_Type','Selling_type','Transmission']
+one_hot = OneHotEncoder(sparse_output=False,handle_unknown='ignore')
+preprocessor = ColumnTransformer(
+    transformers=[('cat',one_hot,categorical_features)],
+                  remainder='passthrough')
+X_train_encoded =preprocessor.fit_transform(X_train)
+X_test_encoded =preprocessor.transform(X_test)
+ lr=LinearRegression()
+lr.fit(X_train_encoded,y_train)
+y_pred=lr.predict(X_test_encoded)
+r2_lr=r2_score(y_test,y_pred)
+mse_lr=mean_squared_error(y_test,y_pred)
+mae_lr=mean_absolute_error(y_test,y_pred)
+cv_score_lr=cross_val_score(lr,X_train_encoded,y_train,cv=5)
+print(f"Linear Regression Model")
+print(f"r^2 value :{r2_lr}")
+print(f"mean squared error :{mse_lr}")
+print(f"mean absolute error :{mae_lr}")
+print(f"CV score :{cv_score_lr}")
+plt.figure(figsize=(12,4))
+plt.plot(y_test.values,label='Actual',color='pink',marker='o')
+plt.plot(y_pred_lr,label='Predicated',color='red',marker='x')
+plt.title('Actual vs Predicted Values(Linear Regression)')
+plt.xlabel('Index')
+plt.ylabel('Values')
+plt.legend()
+plt.show()
+plt.figure(figsize=(10,6))
+sns.scatterplot(x=y_test,y=y_pred,color='pink',label='Predicted vs Actual')
+plt.plot([min(y_test),max(y_test)],[min(y_test),max(y_test)],color='red',lw=2,label='Perfect Prediction')
+plt.xlabel('Actual')
+plt.ylabel('Predicted')
+plt.title('Actual vs Predicted Values')
+plt.legend()
+plt.show()
+  plt.figure(figsize=(14,7))
+sns.scatterplot(x=y_test,y=y_pred,color='pink',label='Residuals')
+plt.axhline(0,color='red',lw=2)
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.title('Linear Regression:Residuals Plot')
+plt.legend()
+plt.show()
+  categorical_features =['Fuel_Type','Selling_type','Transmission']
+one_hot = OneHotEncoder(sparse_output=False,handle_unknown='ignore')
+preprocessor = ColumnTransformer(
+    transformers=[('cat',one_hot,categorical_features)],
+                  remainder='passthrough')
+X_train_encoded = preprocessor.fit_transform(X_train)
+X_test_encoded = preprocessor.transform(X_test)
+rfr=RandomForestRegressor()
+rfr.fit(X_train_encoded,y_train)
+y_pred_rfr=rfr.predict(X_test_encoded)
+r2=r2_score(y_test,y_pred_rfr)
+mse=mean_squared_error(y_test,y_pred_rfr)
+mae=mean_absolute_error(y_test,y_pred_rfr)
+cv_score=cross_val_score(rfr,X_train_encoded,y_train,cv=5)
+print(f"Random Forest Regression Model")
+print(f"r^2 value :{r2}")
+print(f"mean squared error :{mse}")
+print(f"mean absolute error :{mae}")
+print(f"CV score :{cv_score}")
+plt.figure(figsize=(14,7))
+plt.plot(y_test.values,label='Actual',color='pink',marker='o')
+plt.plot(y_pred_rfr,label='Predicated',color='red',marker='x')
+plt.title('Actual vs Predicted Values')
+plt.xlabel('Index')
+plt.ylabel('Values')
+plt.legend()
+plt.show()
+  plt.figure(figsize=(10,6))
+sns.scatterplot(x=y_test,y=y_pred_rfr,color='blue',label='Predicted vs Actual')
+plt.plot([min(y_test),max(y_test)],[min(y_test),max(y_test)],color='red',lw=2,label='Perfect Prediction')
+plt.xlabel('Actual Values')
+plt.ylabel('Predicted Values')
+plt.title('Random Forest: Actual vs Predicted Values')
+plt.legend()
+plt.show()
+residuals_rfr=y_test-y_pred_rfr
+plt.figure(figsize=(10,6))
+sns.scatterplot(x=y_pred_rfr,y=residuals_rfr,color='violet',label='Residuals')
+plt.axhline(0,color='red',lw=2)
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.title('Random Forest:Residuals Plot')
+plt.legend()
+plt.show()
+categorical_features =['Fuel_Type','Selling_type','Transmission']
+one_hot = OneHotEncoder(sparse_output=False,handle_unknown='ignore')
+preprocessor = ColumnTransformer(
+    transformers=[('cat',one_hot,categorical_features)],
+                  remainder='passthrough')
+X_train_encoded=preprocessor.fit_transform(X_train)
+X_test_encoded=preprocessor.transform(X_test)
+dt=DecisionTreeRegressor()
+dt.fit(X_train_encoded,y_train)
+y_pred_dt=dt.predict(X_test_encoded)
+r2=r2_score(y_test,y_pred_dt)
+mse=mean_squared_error(y_test,y_pred_dt)
+mae=mean_absolute_error(y_test,y_pred_dt)
+cv_scores=cross_val_score(dt,X_train_encoded,y_train,cv=5)
+print(f"Decision Tree Regression Model")
+print(f"r^2 value :{r2}")
+print(f"mean squared error :{mse}")
+print(f"mean absolute error :{mae}")
+print(f"CV score :{np.mean(cv_scores)}")
+  plt.figure(figsize=(14,7))
+plt.plot(y_test.values,label='Actual',color='pink',marker='o')
+plt.plot(y_pred_dt,label='Predicated',color='red',marker='x')
+plt.title('Actual vs Predicted Values')
+plt.xlabel('Index')
+plt.ylabel('Values')
+plt.legend()
+plt.show()
+plt.figure(figsize=(10,6))
+sns.scatterplot(x=y_test,y=y_pred_dt,color='blue',label='Predicted vs Actual')
+plt.plot([min(y_test),max(y_test)],[min(y_test),max(y_test)],color='red',lw=2,label='Perfect Prediction')
+plt.xlabel('Actual Values')
+plt.ylabel('Predicted Values')
+plt.title('Decision Tree: Actual vs Predicted Values')
+plt.legend()
+plt.show()  
+  plt.figure(figsize=(10,6))
+sns.scatterplot(x=y_test,y=y_pred_dt,color='blue',label='Predicted vs Actual')
+plt.plot([min(y_test),max(y_test)],[min(y_test),max(y_test)],color='red',lw=2,label='Perfect Prediction')
+plt.xlabel('Actual Values')
+plt.ylabel('Predicted Values')
+plt.title('Decision Tree: Actual vs Predicted Values')
+plt.legend()
+residuals_dt= y_test - y_pred_dt
+plt.figure(figsize=(14,7))
+sns.scatterplot(x=y_pred_dt,y=residuals_dt,color='violet',label='Residuals')
+plt.axhline(0,color='red',lw=2)
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.title('Linear Regression:Residuals Plot')
+plt.legend()
+plt.show()
+  param_grid ={'alpha':[0.001,0.01,0.1,1,10,100,1000]}
+ridge=GridSearchCV(Ridge(),param_grid,cv=5,scoring='neg_mean_squared_error')
+ridge.fit(X_train_encoded,y_train)
+best_ridge=ridge.best_estimator_
+y_pred_ridge=best_ridge.predict(X_test_encoded)
+r2_ridge=r2_score(y_test,y_pred_ridge)
+mse_ridge=mean_squared_error(y_test,y_pred_ridge)
+mae_ridge=mean_absolute_error(y_test,y_pred_ridge)
+cv_scores_ridge=cross_val_score(best_ridge,X_train_encoded,y_train,cv=5)
+print(f" Best Ridge Model:{best_ridge}")
+print(f"r^2 value :{r2_ridge}")
+print(f"mean squared error :{mse_ridge}")
+print(f"mean absolute error :{mae_ridge}")
+print(f"CV score :{np.mean(cv_scores_ridge)}")
+ plt.figure(figsize=(14,7))
+plt.plot(y_test.values,label='Actual',color='black',marker='o')
+plt.plot(y_pred_ridge,label='Predicated',color='red',marker='x')
+plt.title('Actual vs Predicted Values')
+plt.xlabel('Index')
+plt.ylabel('Values')
+plt.legend()
+plt.show()
+ plt.figure(figsize=(10,6))
+sns.scatterplot(x=y_test,y=y_pred_ridge,color='green',label='Predicted vs Actual')
+plt.plot([min(y_test),max(y_test)],[min(y_test),max(y_test)],color='red',lw=2,label='Perfect Prediction')
+plt.xlabel('Actual Values')
+plt.ylabel('Predicted Values')
+plt.title('Hyper Tuned Ridge: Actual vs Predicted Values')
+plt.legend()
+plt.show()
+residuals_ridge=y_test-y_pred_ridge
+plt.figure(figsize=(14,7))
+sns.scatterplot(x=y_pred_ridge,y=residuals_ridge,color='violet',label='Residuals')
+plt.axhline(0,color='purple',lw=2)
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.title('Hyper Tuned Ridge:Residuals Plot')
+plt.legend()
+plt.show()
+import pandas as pd 
+import matplotlib.pyplot as plt
+models=['Linear Regression','Random Forest','Decision Tree','Ridge']
+r2_values=[1.0,0.9100881745346192,0.927277217803154,0.999999999998573]
+mse_values=[2.6522759255197895e-28,2.1748516483516482,2.6889081510988984,4.267472135889358e-11]
+mae_values=[1.1363315660833745e-14,0.6689010989010988,0.6770780219780219,3.850307352143728e-06]
+cv_scores=[1.0,0.8793768757197713,0.8682929856261703,0.9999999999970216]
+results =pd.DataFrame({
+    'Model':models,
+    'R2':r2_values,
+    'MSE':mse_values,
+    'MAE':mae_values,
+    'CV Score':cv_scores
+})
+results_transposed=results.set_index('Model').transpose()
+print(results_transposed)
+plt.figure(figsize=(10,6))
+plt.subplot(2,2,1)
+plt.bar(results['Model'],results['R2'],color='pink')
+plt.ylim(0,1.1)
+plt.xlabel('Model')
+plt.ylabel('R2')
+plt.title('R2 Score')
+plt.subplot(1,1,1)
+plt.bar(results['Model'],results['MSE'],color='Black')
+plt.ylim(0,1.1)
+plt.xlabel('Model')
+plt.ylabel('MSE')
+plt.title('MSE Score')
+plt.figure(figsize=(24,14))
+plt.subplot(2,2,2)
+plt.bar(results['Model'],results['MAE'],color='orange')
+plt.xlabel('Model')
+plt.ylabel('Mean absolute Error')
+plt.title('MAE Score')
+plt.show()
+plt.figure(figsize=(24,14))
+plt.subplot(2,2,3)
+plt.bar(results['Model'],results['CV Score'],color='purple')
+plt.xlabel('Model')
+plt.ylabel('CV Score')
+plt.title('CV Score')  
+  
