@@ -50,4 +50,5 @@ The dataset used in this project contains features like:
 
 ## Output
 ![Image](https://github.com/user-attachments/assets/c0c14249-b5ed-46d5-9e4c-db00a9085939)
+![Image](https://github.com/user-attachments/assets/fa9a6fed-5f54-443d-8006-0db55e33bc0a)
 
