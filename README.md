@@ -49,5 +49,5 @@ The dataset used in this project contains features like:
 - Price (Target Variable)
 
 ## Output
-
+![Image](https://github.com/user-attachments/assets/c0c14249-b5ed-46d5-9e4c-db00a9085939)
 
