@@ -79,7 +79,6 @@ The dataset used in this project contains features like:
 
 ![Image](https://github.com/user-attachments/assets/49770423-a18c-4642-a8dc-1542ae5cc565)
 
-
 ![Image](https://github.com/user-attachments/assets/09ae29d7-da4b-49aa-aa11-0c7e1e623348)
 
 ![Image](https://github.com/user-attachments/assets/0cf7f9d6-c91d-4534-8692-9ce4177eb1b4)
@@ -97,4 +96,46 @@ The dataset used in this project contains features like:
 ![Image](https://github.com/user-attachments/assets/02dcf4cc-1afe-44eb-8dca-56a29bc96ce2)
 
 ![Image](https://github.com/user-attachments/assets/b44ddd97-ac17-4e96-9e0e-5075180975c8)
+![Image](https://github.com/user-attachments/assets/16024029-d7b4-4706-bc3d-01823eea6a41)
+
+![Image](https://github.com/user-attachments/assets/b6067690-3fc6-4c0b-b45d-1cfdf3c37e24)
+
+![Image](https://github.com/user-attachments/assets/25104629-ed0e-415f-8c75-6792c07300bd)
+
+![Image](https://github.com/user-attachments/assets/8036ddf5-c5e9-4500-9239-7400fe7ab6e5)
+
+![Image](https://github.com/user-attachments/assets/1cfb1e65-4512-46a0-90d5-53a5f3d56916)
+
+![Image](https://github.com/user-attachments/assets/f0727c13-5c44-4305-adcb-b52caaeb1b02)
+
+![Image](https://github.com/user-attachments/assets/8745db60-0805-4bbe-a644-715e5922324a)
+
+![Image](https://github.com/user-attachments/assets/7cba3309-4fa1-484c-bcd5-f988649ac94e)
+
+![Image](https://github.com/user-attachments/assets/a884425a-74af-49f9-845f-05528a75f5c2)
+
+![Image](https://github.com/user-attachments/assets/618855b8-297f-4936-8200-c150f9d82e7c)
+
+![Image](https://github.com/user-attachments/assets/d6a6d3cd-c2d2-4a11-adf2-5f2d0da09352)
+
+![Image](https://github.com/user-attachments/assets/74feb507-5bf0-49e6-ab4f-318ee9000858)
+
+![Image](https://github.com/user-attachments/assets/107ea0ac-b4a9-4d7a-9bfe-ca745b27f8af)
+
+![Image](https://github.com/user-attachments/assets/43c1dc27-00bf-45de-9996-67d6cafd2700)
+
+![Image](https://github.com/user-attachments/assets/22dac3ef-2872-4d10-a8b5-51cc946cfb5a)
+
+![Image](https://github.com/user-attachments/assets/267772da-ecc8-4727-833a-4dda8be97163)
+
+![Image](https://github.com/user-attachments/assets/fe3c95be-2346-415e-b29e-671eb6f20c02)
+
+
+
+
+
+
+
+
+
 
